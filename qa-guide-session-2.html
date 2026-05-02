@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Q&A + Разбор Workflow 2 — AI-маркетолог</title>
+  <style>
+    :root {
+      --bg: #0f0f13;
+      --surface: #18181f;
+      --surface2: #1f1f2a;
+      --border: #2a2a38;
+      --accent: #7c6aff;
+      --accent2: #a78bfa;
+      --accent-glow: rgba(124,106,255,0.15);
+      --green: #34d399;
+      --red: #f87171;
+      --yellow: #fbbf24;
+      --text: #e2e2ee;
+      --text-muted: #8b8ba0;
+      --text-dim: #5a5a72;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      min-height: 100vh;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: 260px;
+      min-width: 260px;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      padding: 24px 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar-logo {
+      padding: 0 20px 20px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 16px;
+    }
+    .sidebar-logo .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--accent-glow);
+      border: 1px solid var(--accent);
+      color: var(--accent2);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .05em;
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+    .sidebar-logo h2 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .sidebar-logo p {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .sidebar nav { flex: 1; }
+    .nav-section {
+      padding: 0 12px 4px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      margin: 12px 0 4px;
+    }
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      margin: 0 8px;
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 13.5px;
+      transition: all .15s;
+    }
+    .nav-link:hover { background: var(--surface2); color: var(--text); }
+    .nav-link.active { background: var(--accent-glow); color: var(--accent2); }
+    .nav-link .emoji { font-size: 16px; width: 20px; text-align: center; }
+    .sidebar-footer {
+      padding: 16px 20px 0;
+      border-top: 1px solid var(--border);
+      margin-top: auto;
+    }
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .stat-item { text-align: center; }
+    .stat-num {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--accent2);
+      display: block;
+    }
+    .stat-label {
+      font-size: 10px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+
+    /* ── MAIN ── */
+    main {
+      flex: 1;
+      max-width: 860px;
+      padding: 48px 40px;
+      overflow-x: hidden;
+    }
+    .page-hero {
+      margin-bottom: 48px;
+    }
+    .page-hero .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--accent-glow);
+      border: 1px solid rgba(124,106,255,.4);
+      color: var(--accent2);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      padding: 4px 12px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .page-hero h1 {
+      font-size: 34px;
+      font-weight: 800;
+      line-height: 1.2;
+      background: linear-gradient(135deg, #e2e2ee 0%, #a78bfa 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 12px;
+    }
+    .page-hero p {
+      font-size: 16px;
+      color: var(--text-muted);
+      max-width: 580px;
+    }
+    .meta-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* ── SECTION ── */
+    .section {
+      margin-bottom: 60px;
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--accent-glow);
+      border: 1px solid rgba(124,106,255,.3);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    .section-header h2 {
+      font-size: 22px;
+      font-weight: 700;
+    }
+    .section-header .sub {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* ── CARDS ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 16px;
+      transition: border-color .2s;
+    }
+    .card:hover { border-color: rgba(124,106,255,.4); }
+    .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-body { font-size: 14px; color: var(--text-muted); line-height: 1.65; }
+    .card-body strong { color: var(--text); }
+
+    /* Tool grid */
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    .tool-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: all .2s;
+    }
+    .tool-card:hover {
+      border-color: rgba(124,106,255,.5);
+      transform: translateY(-2px);
+    }
+    .tool-card .emoji { font-size: 22px; }
+    .tool-card .name { font-size: 14px; font-weight: 700; }
+    .tool-card .desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+    .tool-card .role {
+      margin-top: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent2);
+      background: var(--accent-glow);
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+
+    /* Q&A pairs */
+    .qa-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 12px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .qa-q {
+      padding: 16px 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      cursor: pointer;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .qa-q:hover { background: var(--surface2); }
+    .qa-q .q-label {
+      width: 24px;
+      height: 24px;
+      background: var(--accent-glow);
+      border: 1px solid var(--accent);
+      color: var(--accent2);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .qa-q .q-text {
+      flex: 1;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .qa-q .toggle {
+      color: var(--text-dim);
+      font-size: 12px;
+      transition: transform .2s;
+      margin-top: 4px;
+    }
+    .qa-a {
+      padding: 0 20px 0 56px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .3s ease, padding .3s ease;
+    }
+    .qa-a.open {
+      max-height: 800px;
+      padding: 0 20px 16px 56px;
+    }
+    .qa-a-inner {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      border-top: 1px solid var(--border);
+      padding-top: 12px;
+    }
+    .qa-a-inner strong { color: var(--text); }
+    .qa-item.open .toggle { transform: rotate(180deg); }
+
+    /* Prompt block */
+    .prompt-block {
+      background: #0d0d16;
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-bottom: 14px;
+      position: relative;
+    }
+    .prompt-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      color: var(--accent2);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      padding-right: 100px;
+    }
+    .prompt-text {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 12.5px;
+      color: #c9c9e0;
+      line-height: 1.7;
+      white-space: pre-wrap;
+    }
+    .copy-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .copy-btn:hover { background: var(--accent-glow); color: var(--accent2); border-color: var(--accent); }
+    .copy-btn.copied { color: var(--green); border-color: var(--green); }
+
+    /* Comparison table */
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 13px;
+    }
+    .compare-table th {
+      padding: 10px 14px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .compare-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(42,42,56,.5);
+      vertical-align: top;
+      line-height: 1.5;
+    }
+    .compare-table tr:last-child td { border-bottom: none; }
+    .compare-table .bad { color: var(--red); }
+    .compare-table .good { color: var(--green); }
+    .compare-table .tool { font-weight: 700; color: var(--text); }
+
+    /* Steps */
+    .steps { counter-reset: step; }
+    .step {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 20px;
+      counter-increment: step;
+    }
+    .step-num {
+      width: 32px;
+      height: 32px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 800;
+      flex-shrink: 0;
+      color: #fff;
+    }
+    .step-content h4 {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .step-content p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .step-content p strong { color: var(--text); }
+
+    /* Callout */
+    .callout {
+      display: flex;
+      gap: 12px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      margin: 16px 0;
+      font-size: 13.5px;
+      line-height: 1.65;
+      color: var(--text-muted);
+    }
+    .callout.tip { border-left: 3px solid var(--green); }
+    .callout.warn { border-left: 3px solid var(--yellow); }
+    .callout.info { border-left: 3px solid var(--accent); }
+    .callout .icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+    .callout strong { color: var(--text); }
+
+    /* Tag pills */
+    .tag-inline {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .tag-green { background: rgba(52,211,153,.12); color: var(--green); }
+    .tag-red { background: rgba(248,113,113,.12); color: var(--red); }
+    .tag-yellow { background: rgba(251,191,36,.12); color: var(--yellow); }
+    .tag-purple { background: var(--accent-glow); color: var(--accent2); }
+
+    /* Puzzle blocks */
+    .puzzle-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 16px 0;
+    }
+    .puzzle-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+    }
+    .puzzle-item .num {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--accent2);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin-bottom: 4px;
+    }
+    .puzzle-item .title { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+    .puzzle-item .desc { font-size: 12px; color: var(--text-muted); }
+
+    /* Divider */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 32px 0;
+    }
+
+    /* Quote */
+    .quote {
+      border-left: 3px solid var(--accent);
+      padding: 10px 18px;
+      margin: 16px 0;
+      background: var(--surface);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      font-size: 14px;
+      font-style: italic;
+      color: var(--text-muted);
+    }
+    .quote cite {
+      display: block;
+      margin-top: 6px;
+      font-style: normal;
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+
+    /* NB3 architecture */
+    .nb-arch {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin: 16px 0;
+    }
+    .nb-arch-item {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+      text-align: center;
+    }
+    .nb-arch-item .nb-icon { font-size: 22px; margin-bottom: 6px; }
+    .nb-arch-item .nb-name { font-size: 12px; font-weight: 700; margin-bottom: 4px; }
+    .nb-arch-item .nb-desc { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+    .nb-arch-item.sources { border-color: rgba(124,106,255,.4); background: rgba(124,106,255,.05); }
+    .nb-arch-item.chat { border-color: rgba(52,211,153,.4); background: rgba(52,211,153,.05); }
+    .nb-arch-item.notes { border-color: rgba(251,191,36,.4); background: rgba(251,191,36,.05); }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      main { padding: 24px 20px; }
+      .puzzle-grid { grid-template-columns: 1fr; }
+      .nb-arch { grid-template-columns: 1fr; }
+      .tool-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    .section-id { scroll-margin-top: 24px; }
+
+    /* Flow chain */
+    .flow-chain {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin: 16px 0;
+    }
+    .flow-node {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      font-size: 14px;
+      color: var(--text-muted);
+      transition: border-color .2s;
+    }
+    .flow-node:hover { border-color: rgba(124,106,255,.4); }
+    .flow-node strong { color: var(--text); }
+    .flow-node.highlight {
+      background: var(--accent-glow);
+      border-color: rgba(124,106,255,.4);
+      color: var(--text);
+    }
+    .flow-arrow {
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 14px;
+      line-height: 1;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ SIDEBAR ═══ -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="badge">✦ AI-маркетолог</div>
+    <h2>Q&amp;A + Разбор Workflow 2</h2>
+    <p>Сессия 2 из 8 · Deep Research · Живые кейсы</p>
+  </div>
+
+  <nav>
+    <div class="nav-section">Программа</div>
+    <a class="nav-link active" href="#overview"><span class="emoji">🏠</span> О сессии</a>
+    <a class="nav-link" href="#tools"><span class="emoji">🛠</span> Стек инструментов</a>
+    <a class="nav-link" href="#case"><span class="emoji">🎯</span> Кейс Руслана</a>
+
+    <div class="nav-section">Глубокий разбор</div>
+    <a class="nav-link" href="#concepts"><span class="emoji">🧠</span> Ключевые концепции</a>
+    <a class="nav-link" href="#examples"><span class="emoji">👥</span> Кейсы участников</a>
+    <a class="nav-link" href="#prompts"><span class="emoji">✍️</span> Промпты сессии</a>
+
+    <div class="nav-section">Вопросы</div>
+    <a class="nav-link" href="#qa"><span class="emoji">💬</span> Открытые вопросы</a>
+    <a class="nav-link" href="#next"><span class="emoji">🚀</span> Что дальше</a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="stat-row">
+      <div class="stat-item">
+        <span class="stat-num">~2ч</span>
+        <span class="stat-label">Длительность</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">4</span>
+        <span class="stat-label">Инструментов</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">4</span>
+        <span class="stat-label">Кейсов</span>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- ═══ MAIN ═══ -->
+<main>
+
+  <!-- HERO -->
+  <div class="page-hero" id="overview">
+    <div class="tag">✦ Сессия 2 из 8 · Deep Research</div>
+    <h1>Q&amp;A + Разбор<br>Deep Research</h1>
+    <p>Живые кейсы участников: как за один день заменить неделю Кастдевов, собрать Big Data своего проекта и принять решение — что продавать, кому и по какой цене.</p>
+    <div class="meta-pills">
+      <span class="pill">⏱ ~2 часа записи</span>
+      <span class="pill">🛠 Perplexity + Gemini + NotebookLM</span>
+      <span class="pill">🎯 4 живых кейса</span>
+      <span class="pill">📍 1 ЦА · 1 боль · 1 продукт</span>
+    </div>
+  </div>
+
+  <!-- ═══ ИНСТРУМЕНТЫ ═══ -->
+  <section class="section section-id" id="tools">
+    <div class="section-header">
+      <div class="section-icon">🛠</div>
+      <div>
+        <h2>Стек инструментов</h2>
+        <div class="sub">Что использовалось на этой сессии и зачем</div>
+      </div>
+    </div>
+
+    <div class="tool-grid">
+      <div class="tool-card">
+        <div class="emoji">🔍</div>
+        <div class="name">Perplexity</div>
+        <div class="desc">Основной инструмент Deep Research. Умеет создавать пространства (Spaces) с ДНК бизнеса для постоянного контекста.</div>
+        <div class="role">Deep Research</div>
+      </div>
+      <div class="tool-card">
+        <div class="emoji">⚡</div>
+        <div class="name">Parallel AI</div>
+        <div class="desc">Параллельный запуск нескольких нейронок одновременно. Одна из трёх в связке Deep Research.</div>
+        <div class="role">Параллельный ресёрч</div>
+      </div>
+      <div class="tool-card">
+        <div class="emoji">🌀</div>
+        <div class="name">Gemini</div>
+        <div class="desc">Третья нейронка в связке. Также умеет объединять несколько блокнотов NotebookLM через плюсик.</div>
+        <div class="role">Синтез + объединение</div>
+      </div>
+      <div class="tool-card">
+        <div class="emoji">🧠</div>
+        <div class="name">NotebookLM</div>
+        <div class="desc">Объективизатор. Принимает синтезы всех трёх нейронок + источники и выдаёт единую картину без личного мнения.</div>
+        <div class="role">Синтез 2-го уровня</div>
+      </div>
+      <div class="tool-card">
+        <div class="emoji">🌐</div>
+        <div class="name">Comet Browser</div>
+        <div class="desc">AI-браузер от Perplexity. Выполняет задачи в браузере автономно: искать товары, оформлять покупки, подавать заявки.</div>
+        <div class="role">Агентный браузинг</div>
+      </div>
+    </div>
+
+    <div class="callout info">
+      <div class="icon">💡</div>
+      <div><strong>Принцип работы связки:</strong> три нейронки — три «подружки» с разными мнениями. NotebookLM — объективный арбитр, который анализирует все три и выдаёт синтез. Это синтез второго уровня.</div>
+    </div>
+  </section>
+
+  <!-- ═══ КЕЙС РУСЛАНА ═══ -->
+  <section class="section section-id" id="case">
+    <div class="section-header">
+      <div class="section-icon">🎯</div>
+      <div>
+        <h2>Кейс Руслана: реабилитолог + Deep Research</h2>
+        <div class="sub">Лучший пример сессии · Показал весь процесс на экране</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📋 Задача</div>
+      <div class="card-body">
+        Руслан — реабилитолог и йогатерапевт. Год назад проводил живые Кастдевы (занимало неделю+). Теперь повторил исследование через Deep Research, чтобы <strong>найти новый продукт</strong> для аудитории девушек-предпринимателей 30–55 лет с перегрузкой головы.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🗺 Пошаговый путь Руслана</div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h4>Подготовка контекста — ДНК бизнеса</h4>
+            <p>Заполнил метапромт: <strong>роль аналитика, ниша, продукт, аудитория, география, формат работы, язык</strong>. Это вводные данные — чем детальнее, тем качественнее результат.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h4>Запуск Deep Research в 3 нейронках</h4>
+            <p>Запускал параллельно в <strong>Parallel AI, Perplexity и Gemini</strong>. Каждая нейронка по трём метапромтам: исследование аудитории, исследование рынка, анализ конкурентов.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h4>Сбор результатов в NotebookLM</h4>
+            <p>С каждой нейронки скопировал <strong>синтез (текст)</strong> и <strong>источники (ссылки)</strong> — оба типа данных загрузил в один блокнот NotebookLM.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h4>Диалог с NotebookLM</h4>
+            <p>Задал вопросы: «Какая платёжеспособная аудитория? Где деньги?» NotebookLM назвал три сегмента. Из этого родился концепт <strong>нового продукта</strong> для предпринимательниц с перегрузкой на основе доказательной медицины — без эзотерики.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <div class="icon">🏆</div>
+      <div><strong>Результат:</strong> один день работы вместо недели Кастдевов. Результат в 2–3 раза глубже прошлогоднего исследования. Плюс — подтверждение гипотезы, что аудитории нужна доказательная база, а не эзотерика.</div>
+    </div>
+
+    <div class="quote">
+      «Реально заняло один день. Результат очень близко к реальности, даже более широкий, чем если бы я провёл Кастдевы.»
+      <cite>— Руслан Дяченко, реабилитолог</cite>
+    </div>
+  </section>
+
+  <!-- ═══ КЛЮЧЕВЫЕ КОНЦЕПЦИИ ═══ -->
+  <section class="section section-id" id="concepts">
+    <div class="section-header">
+      <div class="section-icon">🧠</div>
+      <div>
+        <h2>Ключевые концепции</h2>
+        <div class="sub">Фреймворки и принципы, которые объяснял Влад</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🎯 Главная цель Deep Research</div>
+      <div class="card-body">
+        Deep Research — инструмент для ответа на один вопрос: <strong>«Что делать?»</strong>
+        <br><br>
+        Ценный конечный результат — <strong>принятое решение</strong>:
+        <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;">
+          <span class="tag-inline tag-purple">Что продавать</span>
+          <span class="tag-inline tag-purple">Кому продавать</span>
+          <span class="tag-inline tag-purple">Что делать дальше</span>
+        </div>
+        <br>
+        После этого сомнения заканчиваются. Все вопросы — в NotebookLM, не в голове.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🔬 Синтетические данные vs. Кастдевы</div>
+      <div class="card-body">
+        <table class="compare-table" style="margin:0">
+          <thead>
+            <tr>
+              <th>Параметр</th>
+              <th>Кастдевы (живые)</th>
+              <th>Deep Research</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Время</strong></td>
+              <td class="bad">Неделя и больше</td>
+              <td class="good">Один день</td>
+            </tr>
+            <tr>
+              <td><strong>Охват</strong></td>
+              <td class="bad">10–20 человек</td>
+              <td class="good">Весь интернет</td>
+            </tr>
+            <tr>
+              <td><strong>Глубина</strong></td>
+              <td>Зависит от качества интервью</td>
+              <td class="good">В 2–3 раза шире по отзывам</td>
+            </tr>
+            <tr>
+              <td><strong>Когда нужны живые интервью</strong></td>
+              <td colspan="2">Для валидации гипотез — Кастдевы и транскрибации незаменимы. Deep Research — на первом этапе.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🏗 Big Data под твой проект</div>
+      <div class="card-body">
+        Данные из Deep Research — это не одноразовый отчёт. Это <strong>база знаний</strong>, которую используют все следующие инструменты:
+      </div>
+    </div>
+
+    <div class="flow-chain">
+      <div class="flow-node highlight"><strong>Deep Research → NotebookLM</strong> — база знаний проекта</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-node">🎁 <strong>Упаковка</strong> — ДНК ЦА, лестница Бена Ханта, офер</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-node">🌐 <strong>Сайт + Воронка</strong> — контент, страницы, скрипты продаж</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-node">📣 <strong>Трафик</strong> — таргет, контент-план, рилсы под каждый сегмент</div>
+    </div>
+
+    <div class="callout warn">
+      <div class="icon">⚠️</div>
+      <div>
+        <strong>Почему это важно для рекламы:</strong> если запустить таргет без этой базы — со связкой «1 аудитория + 1 офер» — денег хватит ненадолго. Влад: «4 аудитории × 4 боли = 16 оферов → 16 сайтов → 16 воронок. Вот откуда масштаб».
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📐 Формула фокуса</div>
+      <div class="card-body">
+        Итог Deep Research — всегда одно чёткое решение:
+        <div style="margin-top:16px; display:flex; gap:12px; flex-wrap:wrap; align-items:center; font-size:15px;">
+          <div style="text-align:center; background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:12px 20px;">
+            <div style="font-size:22px; margin-bottom:4px;">👤</div>
+            <div style="font-weight:700; font-size:13px;">1 ЦА</div>
+          </div>
+          <div style="color:var(--text-dim); font-size:20px;">+</div>
+          <div style="text-align:center; background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:12px 20px;">
+            <div style="font-size:22px; margin-bottom:4px;">💢</div>
+            <div style="font-weight:700; font-size:13px;">1 боль</div>
+          </div>
+          <div style="color:var(--text-dim); font-size:20px;">+</div>
+          <div style="text-align:center; background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:12px 20px;">
+            <div style="font-size:22px; margin-bottom:4px;">📦</div>
+            <div style="font-weight:700; font-size:13px;">1 продукт</div>
+          </div>
+          <div style="color:var(--text-dim); font-size:20px;">=</div>
+          <div style="text-align:center; background:var(--accent-glow); border:1px solid rgba(124,106,255,.4); border-radius:8px; padding:12px 20px;">
+            <div style="font-size:22px; margin-bottom:4px;">🎯</div>
+            <div style="font-weight:700; font-size:13px; color:var(--accent2);">Решение</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">👑 Главный принцип: контекст — король</div>
+      <div class="card-body">
+        Качество результата = качество входящих данных.<br><br>
+        <strong>Что грузить на вход:</strong> ДНК бизнеса, описание продукта, данные по аудитории, данные продаж, Excel-таблицы, транскрибации, старые исследования — всё что есть.<br><br>
+        <strong>Ключевое правило:</strong> не говори нейронке <em>как</em> надо делать. Давай ей <em>информацию</em> — она сама знает, что с этим делать.
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ КЕЙСЫ УЧАСТНИКОВ ═══ -->
+  <section class="section section-id" id="examples">
+    <div class="section-header">
+      <div class="section-icon">👥</div>
+      <div>
+        <h2>Кейсы участников</h2>
+        <div class="sub">Четыре разных задачи — один инструмент</div>
+      </div>
+    </div>
+
+    <div class="puzzle-grid">
+      <div class="puzzle-item">
+        <div class="num">Кейс 1</div>
+        <div class="title">Руслан — Реабилитолог</div>
+        <div class="desc">Искал новый продукт для предпринимательниц. Deep Research подтвердил: нужна доказательная база, не эзотерика. Один день вместо недели Кастдевов.</div>
+      </div>
+      <div class="puzzle-item">
+        <div class="num">Кейс 2</div>
+        <div class="title">Данил — Цветочный бизнес</div>
+        <div class="desc">Создал пространство в Perplexity с ДНК бизнеса. Сделал 3 отдельных метапромта. Задача: придумать 2 офера — для офлайна и онлайна, подключив данные продаж.</div>
+      </div>
+      <div class="puzzle-item">
+        <div class="num">Кейс 3</div>
+        <div class="title">Петя — Интернет-магазин</div>
+        <div class="desc">Провёл Deep Research «как будто зашёл в бизнес с нуля». Нашёл операционные точки роста и идею нового сайта под новое направление. Улыбался весь созвон.</div>
+      </div>
+      <div class="puzzle-item">
+        <div class="num">Кейс 4</div>
+        <div class="title">Артём — Бьюти, несколько стран</div>
+        <div class="desc">Краски для волос, бровей, несколько стран. Нужно решить: сегментироваться или продавать всё. Deep Research — правильный инструмент для этого вопроса.</div>
+      </div>
+    </div>
+
+    <div class="callout info">
+      <div class="icon">🔑</div>
+      <div><strong>Инсайт от Пети:</strong> когда делал Deep Research по методологии — интервью-этап задал такие вопросы, о которых за 8 лет в нише никогда не задумывался. Ещё до синтеза уже пошёл что-то переделывать.</div>
+    </div>
+  </section>
+
+  <!-- ═══ ПРОМПТЫ ═══ -->
+  <section class="section section-id" id="prompts">
+    <div class="section-header">
+      <div class="section-icon">✍️</div>
+      <div>
+        <h2>Промпты сессии</h2>
+        <div class="sub">Готовые шаблоны — скопируй и адаптируй под себя</div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:6px; font-size:13px; color:var(--text-muted)">Шаг 1 — Создание метапромта</div>
+
+    <div class="prompt-block">
+      <div class="prompt-label">1. Метапромт для исследования ЦА</div>
+      <div class="prompt-text">Я [имя], [чем занимаешься]. Мой продукт: [описание продукта].
+Целевая аудитория: [кто твои клиенты].
+Ниша: [ниша].
+География: [страна/город].
+Формат работы: [онлайн/офлайн/смешанный].
+Язык: [русский/английский].
+
+Сделай мне метапромт для глубокого исследования целевой аудитории моего продукта.
+Используй его как роль эксперта-аналитика рынка.</div>
+      <button class="copy-btn" onclick="copyPrompt(this)">Копировать</button>
+    </div>
+
+    <div class="prompt-block">
+      <div class="prompt-label">2. Deep Research — запуск исследования</div>
+      <div class="prompt-text">[ВСТАВЬ МЕТАПРОМТ С ШАГА 1]
+
+Задача: сделай глубокое исследование по следующим направлениям:
+1. Целевая аудитория: портреты, боли, страхи, желания, возражения
+2. Рынок: тренды, размер, динамика, ключевые игроки
+3. Конкуренты: что делают лучшие, чего не хватает на рынке
+
+На выходе — структурированный синтез с источниками.</div>
+      <button class="copy-btn" onclick="copyPrompt(this)">Копировать</button>
+    </div>
+
+    <div style="margin-top:20px; margin-bottom:6px; font-size:13px; color:var(--text-muted)">Шаг 2 — Работа в NotebookLM</div>
+
+    <div class="prompt-block">
+      <div class="prompt-label">3. Финальный запрос к NotebookLM</div>
+      <div class="prompt-text">У меня загружены синтезы из трёх нейронок (Parallel AI, Perplexity, Gemini) и все источники.
+
+На основе всех этих данных ответь на вопросы:
+1. Какая целевая аудитория наиболее платёжеспособная и перспективная?
+2. Где больше всего денег в моей нише?
+3. Что делают конкуренты, чего нет на рынке?
+4. Какой продукт / офер мне стоит создать?
+
+Дай мне 3 варианта — от консервативного до прорывного.</div>
+      <button class="copy-btn" onclick="copyPrompt(this)">Копировать</button>
+    </div>
+
+    <div class="prompt-block">
+      <div class="prompt-label">4. Создание офера на основе данных</div>
+      <div class="prompt-text">На базе всей информации, которую ты знаешь о моём бизнесе, аудитории и рынке:
+
+Составь мне 2 офера:
+— Офер для офлайн-продаж
+— Офер для онлайн-продаж
+
+Для каждого:
+• Название / заголовок
+• Для кого (один портрет)
+• Одна ключевая боль, которую закрывает
+• Что входит
+• Почему это лучше, чем у конкурентов
+
+Также: смогу ли я с этими оферами выйти на [нужный оборот]?</div>
+      <button class="copy-btn" onclick="copyPrompt(this)">Копировать</button>
+    </div>
+
+    <div class="callout tip">
+      <div class="icon">💡</div>
+      <div><strong>Лайфхак с данными продаж:</strong> если есть Excel с историей продаж — загружай в NotebookLM. Тогда он видит реальную аналитику: что продаётся, по какому чеку, какой процент рассрочек. И уже на этой основе помогает ставить правильную цену.</div>
+    </div>
+  </section>
+
+  <!-- ═══ Q&A ═══ -->
+  <section class="section section-id" id="qa">
+    <div class="section-header">
+      <div class="section-icon">💬</div>
+      <div>
+        <h2>Открытые вопросы из сессии</h2>
+        <div class="sub">Реальные вопросы участников — развёрнутые ответы</div>
+      </div>
+    </div>
+
+    <div class="qa-item" onclick="toggleQA(this)">
+      <div class="qa-q">
+        <div class="q-label">Q</div>
+        <div class="q-text">Давать нейронке контекст заранее или пусть сама ищет?</div>
+        <div class="toggle">▼</div>
+      </div>
+      <div class="qa-a">
+        <div class="qa-a-inner">
+          <strong>Всегда давать максимум контекста.</strong> Но важно понимать разницу: контекст — это информация о себе и ситуации, а не инструкции «делай так». Когда ты говоришь нейронке, как надо делать, ты ограничиваешь её возможности. Когда ты рассказываешь, кто ты, чем занимаешься и чего хочешь — она сама придумает лучший путь. Грузи папки, файлы, транскрибации, всё что есть. Чем больше — тем точнее результат.
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item" onclick="toggleQA(this)">
+      <div class="qa-q">
+        <div class="q-label">Q</div>
+        <div class="q-text">Как правильно загрузить синтез в NotebookLM — текстом или файлами?</div>
+        <div class="toggle">▼</div>
+      </div>
+      <div class="qa-a">
+        <div class="qa-a-inner">
+          Два варианта — оба работают. <strong>Вставленный текст:</strong> просто копируешь синтез нейронки и вставляешь как источник. <strong>Файл:</strong> скачиваешь ответ и загружаешь. Плюс — можно установить плагин для удобного скачивания. Важно: загружай и <strong>синтез</strong> (что написала нейронка), и <strong>источники</strong> (ссылки, на которые она ссылалась) — это разные данные, оба ценны.
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item" onclick="toggleQA(this)">
+      <div class="qa-q">
+        <div class="q-label">Q</div>
+        <div class="q-text">Что спрашивать у NotebookLM после того, как всё загрузил?</div>
+        <div class="toggle">▼</div>
+      </div>
+      <div class="qa-a">
+        <div class="qa-a-inner">
+          Вот пример, который разобрали на кейсе Данила с цветами: «У меня есть задача выйти на такой-то оборот. В моём бизнесе — [что продаю, как продаю, данные аналитики]. Составь мне <strong>два офера</strong> — для офлайна и для онлайна». Потом — диалог: «А смогу ли я с этими оферами выйти на такой-то оборот?» Нейронка зайдёт в твою аналитику, посмотрит, что уже работает — и даст конкретный ответ. Не бойся задавать прямые вопросы про деньги.
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item" onclick="toggleQA(this)">
+      <div class="qa-q">
+        <div class="q-label">Q</div>
+        <div class="q-text">Рассказывать весь прошлый опыт нейронке или только про текущий продукт?</div>
+        <div class="toggle">▼</div>
+      </div>
+      <div class="qa-a">
+        <div class="qa-a-inner">
+          Это зависит от задачи. Если делаешь <strong>новый продукт</strong> в новой нише — прошлый опыт в другой нише не очень нужен. Если задача — <strong>улучшить существующее</strong> — грузи всё: прошлые продукты, клиентов, кейсы, даже то, что не работало. Чем больше нейронка знает твою историю, тем лучше она видит, откуда ты пришёл и куда идёшь. Хуже не будет, но и перегружать лишним не нужно.
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item" onclick="toggleQA(this)">
+      <div class="qa-q">
+        <div class="q-label">Q</div>
+        <div class="q-text">У меня много продуктов и стран — с чего начать Deep Research?</div>
+        <div class="toggle">▼</div>
+      </div>
+      <div class="qa-a">
+        <div class="qa-a-inner">
+          Это и есть задача для Deep Research — не ты должен решить, а нейронка должна помочь тебе решить. Загрузи всё что есть: данные по всем продуктам, по всем странам, аналитику продаж. Потом спроси прямо: <strong>«Мне лучше сфокусироваться на чём-то одном или продолжать работать широко? Где больше денег и почему? Что убрать, что оставить?»</strong> Нейронка даст тебе варианты с аргументами — а решение принимаешь ты.
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item" onclick="toggleQA(this)">
+      <div class="qa-q">
+        <div class="q-label">Q</div>
+        <div class="q-text">Не могу найти старый чат с результатами Deep Research — где искать?</div>
+        <div class="toggle">▼</div>
+      </div>
+      <div class="qa-a">
+        <div class="qa-a-inner">
+          Нейронки не помнят другие чаты. Если написал в одном чате — в другом это не найти через запрос. <strong>Решение:</strong> в интерфейсе GPT или Claude есть иконка лупы (поиск по чатам) — ищи по ключевым словам типа «Deep Research» или «ЦА». На будущее — всегда сохраняй финальный результат в NotebookLM как источник. Тогда ничего не потеряется.
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item" onclick="toggleQA(this)">
+      <div class="qa-q">
+        <div class="q-label">Q</div>
+        <div class="q-text">Грузить файлы с данными в NotebookLM отдельно или всё в один?</div>
+        <div class="toggle">▼</div>
+      </div>
+      <div class="qa-a">
+        <div class="qa-a-inner">
+          <strong>Нейронке всё равно.</strong> Но если хочешь качественнее — назови файлы понятно: «база клиентов», «исследование рынка», «аналитика продаж». Тогда в диалоге можно говорить: «Посмотри данные из базы клиентов» — и нейронка точнее поймёт, откуда брать информацию. Это не обязательно, но улучшает точность ответов.
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item" onclick="toggleQA(this)">
+      <div class="qa-q">
+        <div class="q-label">Q</div>
+        <div class="q-text">Будут ли агенты, которые делают Deep Research автоматически?</div>
+        <div class="toggle">▼</div>
+      </div>
+      <div class="qa-a">
+        <div class="qa-a-inner">
+          Да, и это уже в разработке. Влад: <strong>«Я сделал агента, который одной кнопкой делает то, что вы делаете руками 2 часа — за 10 минут»</strong>. У Parallel AI и Perplexity есть API, этого уже достаточно. Но сначала важно пройти процесс вручную — понять причинно-следственные связи, научиться валидировать результат. Потом автоматизация будет осознанной, а не слепой. Всё это будет на блоке по созданию сотрудников.
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item" onclick="toggleQA(this)">
+      <div class="qa-q">
+        <div class="q-label">Q</div>
+        <div class="q-text">Можно ли настроить таргет прямо на основе данных Deep Research?</div>
+        <div class="toggle">▼</div>
+      </div>
+      <div class="qa-a">
+        <div class="qa-a-inner">
+          Это не просто хорошая идея — это <strong>единственная жизнеспособная стратегия</strong>. Таргет — последний этап в цепочке. Всё заканчивается трафиком, но трафик работает только тогда, когда есть правильные оферы под правильные аудитории. Без базы данных из Deep Research — запускаешь рекламу в пустоту. С базой — у тебя 16 оферов под 4 аудитории × 4 боли. Каждый офер — отдельный сайт, воронка, контент. Вот откуда рекламный бюджет 30–40k $ в месяц.
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item" onclick="toggleQA(this)">
+      <div class="qa-q">
+        <div class="q-label">Q</div>
+        <div class="q-text">Что такое Comet Browser от Perplexity и зачем он нужен?</div>
+        <div class="toggle">▼</div>
+      </div>
+      <div class="qa-a">
+        <div class="qa-a-inner">
+          Comet — это AI-браузер от Perplexity. Он <strong>автономно выполняет задачи в браузере</strong>: мониторит сайты, сравнивает товары, оформляет покупки, подаёт заявки на визы. Влад показал прямо на сессии: дал задачу купить органическую смазку на двух маркетплейсах — Comet сам зашёл, сравнил составы, выбрал топ-3, добавил в корзину. Доступен с подпиской на Perplexity Pro. Полезен для автоматизации рутинных браузерных задач, но для основной работы Влад использует Claude.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ ЧТО ДАЛЬШЕ ═══ -->
+  <section class="section section-id" id="next">
+    <div class="section-header">
+      <div class="section-icon">🚀</div>
+      <div>
+        <h2>Что дальше</h2>
+        <div class="sub">Следующие шаги после этой сессии</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🎁 Бонусный урок — Цифровые сотрудники в Claude</div>
+      <div class="card-body">
+        Влад добавил внеплановый урок перед модулем «Упаковка». Тема: <strong>создание цифровых сотрудников</strong> в Claude — сайты, HTML-документы, скилы, MCP-коннекторы, плагины. Всё вживую на экране одного участника (Анны). Урок добавляет одну неделю к программе — итого 9 недель вместо 8.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📦 Следующий модуль — Упаковка</div>
+      <div class="card-body">
+        Данные из Deep Research превращаются в маркетинговые инструменты:<br><br>
+        <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:8px;">
+          <span class="tag-inline tag-purple">ДНК целевой аудитории</span>
+          <span class="tag-inline tag-purple">Лестница Бена Ханта</span>
+          <span class="tag-inline tag-purple">Офер</span>
+          <span class="tag-inline tag-purple">VSL-видео</span>
+          <span class="tag-inline tag-purple">Контент-план</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🤖 В разработке — Агент для Deep Research</div>
+      <div class="card-body">
+        Влад работает над агентом, который <strong>автоматически делает Deep Research за 10 минут</strong> вместо 2 часов вручную. API Parallel AI + API Perplexity + параллельные запросы = один клик. Появится по ходу обучения.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">✅ Твоя домашняя задача</div>
+      <div class="card-body">
+        <strong>Если ещё не сделал Deep Research:</strong><br>
+        1. Подготовь ДНК бизнеса — максимально детальный контекст о себе<br>
+        2. Сгенерируй метапромты через нейронку (пример промпта выше)<br>
+        3. Запусти Deep Research в Parallel AI + Perplexity + Gemini<br>
+        4. Скопируй синтезы + источники → загрузи в NotebookLM<br>
+        5. Задай главный вопрос: <strong>«Где мои деньги и что мне делать?»</strong><br>
+        6. Прими одно решение: 1 ЦА + 1 боль + 1 продукт
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <div class="icon">🔥</div>
+      <div>
+        <strong>Главный инсайт сессии:</strong> данные из Deep Research — это не просто исследование. Это топливо для всего, что будет дальше. Каждая нейронка, которая будет работать с твоим проектом следующие месяцы, будет обращаться именно к этой базе. Сделай её один раз — хорошо.
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div style="text-align:center; color:var(--text-dim); font-size:13px; padding-bottom:16px">
+      <div style="font-size:22px; margin-bottom:8px">✦</div>
+      <div>AI-маркетолог · Q&amp;A + Разбор Workflow 2</div>
+      <div style="margin-top:4px">Если постишь в stories — тегай. Каждые 2 недели разыгрываются ништяки для самых активных 🎁</div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  function toggleQA(item) {
+    const answer = item.querySelector('.qa-a');
+    const isOpen = answer.classList.contains('open');
+    // close all
+    document.querySelectorAll('.qa-a.open').forEach(a => a.classList.remove('open'));
+    document.querySelectorAll('.qa-item.open').forEach(i => i.classList.remove('open'));
+    // open clicked if was closed
+    if (!isOpen) {
+      answer.classList.add('open');
+      item.classList.add('open');
+    }
+  }
+
+  function copyPrompt(btn) {
+    const text = btn.closest('.prompt-block').querySelector('.prompt-text').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = '✓ Скопировано';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'Копировать';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  }
+
+  // Active nav on scroll
+  const sections = document.querySelectorAll('.section-id, .page-hero');
+  const navLinks = document.querySelectorAll('.nav-link');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        navLinks.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.nav-link[href="#${id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { threshold: 0.3, rootMargin: '-10% 0px -60% 0px' });
+
+  document.querySelectorAll('[id]').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
